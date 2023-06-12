@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -16,14 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    dd(DB::connection()->getMongoClient()->listDatabases());
-    // try {
-    //     $manager = new Manager("mongodb://localhost:27017");
-    //     $manager->executeCommand('admin', new \MongoDB\Driver\Command(['ping' => 1]));
-    //     $dbConnection = true;
-    // } catch (\Exception $e) {
-    //     $dbConnection = false;
-    // }
+    try {
+        DB::connection()->getMongoClient()->listDatabases();
+        $dbConnection = true;
+    } catch (Exception) {
+        $dbConnection = false;
+    }
 
     // Horário da última vez que o CRON foi executado
     $lastCronExecution = exec('stat -c %Y /path/to/cron_file');
@@ -41,6 +40,12 @@ Route::get('/', function () {
         'memory_usage' => $memoryUsage,
     ]);
 });
+
+Route::get('/products', [ProductController::class, 'index'])->name('product.index');
+Route::get('/products/{code}', [ProductController::class, 'show'])->name('product.show');
+Route::put('/products/{code}', [ProductController::class, 'update'])->name('product.update');
+Route::post('/products/{code}/delete', [ProductController::class, 'delete'])->name('product.delete');
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -34,7 +34,7 @@ class getApiProductsData extends Command
         GetNewProductsFilesService $getNewProductsFilesService,
         CreateNewProductsByFile $createNewProductsByFile
     ) {
-        Product::query()->delete();
+
         $newProductsFiles = $getNewProductsFilesService->handle();
         $this->output->progressStart(sizeof($newProductsFiles));
         foreach ($newProductsFiles as $newProductsFile) {
