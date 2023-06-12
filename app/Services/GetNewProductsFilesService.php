@@ -18,7 +18,6 @@ class GetNewProductsFilesService
         $items = collect(explode("\n", $body))->filter();
 
         $importedProductFiles = ImportedProductFile::pluck('name');
-
         return $items->filter(fn ($item) => $importedProductFiles->doesntContain($item));
     }
 }

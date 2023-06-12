@@ -97,6 +97,14 @@ return [
             'dsn' => env('DB_DSN'),
             'database' => env('DB_DATABASE', 'homestead'),
         ],
+        'mongodbtest' => [
+            'driver' => 'mongodb',
+            'dsn' => env('DB_DSN'),
+            'database' => env('DB_DATABASE', 'homestead'),
+            'options'  => [
+                'database' => ':memory:', // Configuração para usar o MongoDB em memória
+            ],
+        ],
 
     ],
 
