@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Services;
+namespace Tests\Feature\Services;
 
 use App\Models\ImportedProductFile;
-use App\Services\GetNewProductsFilesService;
 use Illuminate\Support\Facades\Http;
+use App\Services\GetNewProductsFilesService;
 use Tests\TestCase;
 
 class GetNewProductsFilesServiceTest extends TestCase

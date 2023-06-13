@@ -8,7 +8,7 @@ use App\Services\CreateNewProductsByFile;
 use App\Services\GetNewProductsFilesService;
 use Illuminate\Console\Command;
 
-class getApiProductsData extends Command
+class GetApiProductsData extends Command
 {
     /**
      * The name and signature of the console command.
@@ -36,13 +36,17 @@ class getApiProductsData extends Command
     ) {
 
         $newProductsFiles = $getNewProductsFilesService->handle();
-        $this->output->progressStart(sizeof($newProductsFiles));
+
+        $this->output->progressStart($newProductsFiles->count());
+
         foreach ($newProductsFiles as $newProductsFile) {
+            $createNewProductsByFile->handle($newProductsFile);
+
             ImportedProductFile::create(['name' => $newProductsFile]);
 
-            $createNewProductsByFile->handle($newProductsFile);
             $this->output->progressAdvance();
         }
+
         $this->output->progressFinish();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\getApiProductsData;
+use App\Console\Commands\GetApiProductsData;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,8 +17,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule
-            ->command(getApiProductsData::class)
-            ->dailyAt('11:27');
+            ->command(GetApiProductsData::class)
+            ->everyMinute();
     }
 
     /**

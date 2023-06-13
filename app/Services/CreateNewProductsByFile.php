@@ -13,33 +13,39 @@ class CreateNewProductsByFile
 {
     public function handle(string $fileName)
     {
+        $filePath = $this->downloadFile($fileName);
 
-        $this->downloadFile($fileName);
-        $this->createProducts();
-        $this->deleteFile();
+        $this->createProducts($filePath);
+
+        $this->deleteFiles();
     }
-    protected function deleteFile()
+
+    protected function deleteFiles()
     {
         Storage::delete('products.json');
+        Storage::delete('products.json.gz');
     }
-    protected function createProducts()
-    {
-        $file = file(Storage::path('products.json'));
 
-        for ($i = 0; $i < config('open-food.product_quantity_by_file'); $i++) {
+    protected function createProducts(string $filePath)
+    {
+        $file = file($filePath);
+
+        $productsCountPerFile = config('open-food.product_quantity_by_file');
+
+        for ($i = 0; $i < $productsCountPerFile; $i++) {
             $data = json_decode($file[$i], true);
             $data['imported_t'] = now()->toISOString();
             $data['status'] = ProductStatus::Published;
             Product::create($data);
         }
     }
-    protected function downloadFile(string $fileName)
-    {
-        $filePath = storage_path('app/products.json.gz');
-        Http::sink($filePath)->get(config('open-food.open_food_url_prefix') . $fileName);
 
-        $compressedFilePath = storage_path('app/products.json.gz');
-        $uncompressedFilePath = storage_path('app/products.json');
+    protected function downloadFile(string $fileName): string
+    {
+        $compressedFilePath = Storage::path('products.json.gz');
+        Http::sink($compressedFilePath)->get(config('open-food.open_food_url_prefix') . $fileName);
+
+        $uncompressedFilePath = Storage::path('products.json');
 
         $compressedFile = gzopen($compressedFilePath, 'rb');
         $uncompressedFile = fopen($uncompressedFilePath, 'w');
@@ -51,5 +57,7 @@ class CreateNewProductsByFile
 
         gzclose($compressedFile);
         fclose($uncompressedFile);
+
+        return $uncompressedFilePath;
     }
 }
