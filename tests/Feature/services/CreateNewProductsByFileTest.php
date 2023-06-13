@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Services;
 
-use App\Models\Product;
 use App\Services\CreateNewProductsByFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +17,7 @@ class CreateNewProductsByFileTest extends TestCase
         ]);
         $createNewProductsByFile = new CreateNewProductsByFile();
         $createNewProductsByFile->handle('products.json.gz');
-        
+
         //veerificar productIndex
         //verifcar produtos
         //verificar arquivos

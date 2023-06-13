@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Facade;
 
 return [
     'open_food_url_prefix' => env('OPEN_FOOD_URL', 'Laravel'),

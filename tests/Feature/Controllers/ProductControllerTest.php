@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Models\ApiToken;
 use App\Models\Product;
 use Tests\TestCase;
 
@@ -14,7 +15,12 @@ class ProductControllerTest extends TestCase
 
         Product::factory()->count($productQuantity)->create();
 
-        $response = $this->get('/api/products');
+        $apiToken = $this->get('/api/apiToken');
+
+        $a = ApiToken::all();
+        // dd($a, $apiToken->getContent());
+
+        $response = $this->get('/api/products', ['Authorization' => $apiToken->getContent()]);
 
         $response->assertStatus(200);
 
