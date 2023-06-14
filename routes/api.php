@@ -26,18 +26,12 @@ Route::middleware('auth.apiToken')->group(function () {
             $dbConnection = false;
         }
 
-        // Horário da última vez que o CRON foi executado
-        $lastCronExecution = exec('stat -c %Y /path/to/cron_file');
-
-        // Tempo online
         $uptime = exec('uptime -p');
 
-        // Uso de memória
         $memoryUsage = memory_get_usage();
 
         return response()->json([
             'db_connection' => $dbConnection,
-            'last_cron_execution' => $lastCronExecution,
             'uptime' => $uptime,
             'memory_usage' => $memoryUsage,
         ]);
@@ -48,4 +42,5 @@ Route::middleware('auth.apiToken')->group(function () {
     Route::get('/products/{code}', [ProductController::class, 'show'])->name('product.show');
     Route::post('/products/{code}/delete', [ProductController::class, 'delete'])->name('product.delete');
 });
-Route::get('/apiToken', ApiTokenController::class)->name('apiToken');
+
+Route::post('/apiToken', ApiTokenController::class)->name('apiToken');

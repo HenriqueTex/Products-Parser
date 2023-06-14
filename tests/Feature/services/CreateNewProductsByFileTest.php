@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Services;
 
-use App\Models\Product;
 use App\Services\CreateNewProductsByFile;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CreateNewProductsByFileTest extends TestCase

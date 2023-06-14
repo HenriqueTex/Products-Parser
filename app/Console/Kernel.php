@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule
             ->command(GetApiProductsData::class)
-            ->everyMinute();
+            ->dailyAt('23:59');
     }
 
     /**

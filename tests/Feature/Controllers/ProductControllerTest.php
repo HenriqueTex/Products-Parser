@@ -17,7 +17,7 @@ class ProductControllerTest extends TestCase
 
         Product::factory()->count($productQuantity)->create();
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->get(route('product.index'), ['Authorization' => $apiToken->getContent()]);
 
@@ -75,7 +75,7 @@ class ProductControllerTest extends TestCase
 
         Product::factory()->count($productQuantity)->create();
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->get(route('product.index'), ['Authorization' => $apiToken->getContent()]);
 
@@ -88,7 +88,7 @@ class ProductControllerTest extends TestCase
     {
         $product = Product::factory()->create();
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->get(route('product.show', $product->code), ['Authorization' => $apiToken->getContent()]);
 
@@ -112,7 +112,7 @@ class ProductControllerTest extends TestCase
 
         $wrongCode = 2;
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->get(route('product.show', $wrongCode), ['Authorization' => $apiToken->getContent()]);
 
@@ -123,7 +123,7 @@ class ProductControllerTest extends TestCase
     {
         $product = Product::factory()->create();
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->post(route('product.delete', $product->code), [], ['Authorization' => $apiToken->getContent()]);
 
@@ -142,7 +142,7 @@ class ProductControllerTest extends TestCase
 
         $wrongCode = 2;
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->post(route('product.delete', $wrongCode), [], ['Authorization' => $apiToken->getContent()]);
 
@@ -155,7 +155,7 @@ class ProductControllerTest extends TestCase
 
         $newProduct = Product::factory()->make();
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->withHeaders(['Authorization' => $apiToken->getContent()])
             ->put(
@@ -182,7 +182,7 @@ class ProductControllerTest extends TestCase
 
         $newCode = Product::factory()->make()->code;
 
-        $apiToken = $this->get(route('apiToken'));
+        $apiToken = $this->post(route('apiToken'), ['email' => 'test@test.com']);
 
         $response = $this->withHeaders(['Authorization' => $apiToken->getContent()])
             ->put(
