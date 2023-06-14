@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class ImportedProductFile extends Model
+class ImportedProductsFile extends Model
 {
     protected $fillable = ['name'];
 }

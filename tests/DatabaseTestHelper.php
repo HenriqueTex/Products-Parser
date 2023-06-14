@@ -3,15 +3,15 @@
 namespace Tests;
 
 use App\Models\ApiToken;
-use App\Models\ImportedProductFile;
+use App\Models\ImportedProductsFile;
 use App\Models\Product;
 
 class DatabaseTestHelper
 {
-    public static function resetDatabase()
-    {
-        Product::query()->delete();
-        ImportedProductFile::query()->delete();
-        ApiToken::query()->delete();
-    }
+	public static function resetDatabase()
+	{
+		Product::query()->delete();
+		ImportedProductsFile::query()->delete();
+		ApiToken::query()->delete();
+	}
 }

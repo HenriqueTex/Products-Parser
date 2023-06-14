@@ -15,7 +15,7 @@ class ProductFactory extends Factory
 
         return [
             'code' => (string)$this->faker->unique()->randomNumber(5),
-            'status' => ProductStatus::Published,
+            'status' => ProductStatus::Published->value,
             'imported_t' => $this->faker->dateTimeThisYear(),
             'url' => $this->faker->url,
             'creator' => $this->faker->userName,

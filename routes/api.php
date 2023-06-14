@@ -43,10 +43,9 @@ Route::middleware('auth.apiToken')->group(function () {
         ]);
     });
 
-
+    Route::put('/products/{code}', [ProductController::class, 'update'])->name('product.update');
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
     Route::get('/products/{code}', [ProductController::class, 'show'])->name('product.show');
-    Route::put('/products/{code}', [ProductController::class, 'update'])->name('product.update');
     Route::post('/products/{code}/delete', [ProductController::class, 'delete'])->name('product.delete');
 });
 Route::get('/apiToken', ApiTokenController::class)->name('apiToken');

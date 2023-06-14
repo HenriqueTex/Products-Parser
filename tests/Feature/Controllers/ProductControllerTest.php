@@ -2,25 +2,24 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Models\ApiToken;
+use App\Enums\ProductStatus;
 use App\Models\Product;
 use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
 {
 
+
     public function test_can_list_all_products()
     {
+
         $productQuantity = 5;
 
         Product::factory()->count($productQuantity)->create();
 
-        $apiToken = $this->get('/api/apiToken');
+        $apiToken = $this->get(route('apiToken'));
 
-        $a = ApiToken::all();
-        // dd($a, $apiToken->getContent());
-
-        $response = $this->get('/api/products', ['Authorization' => $apiToken->getContent()]);
+        $response = $this->get(route('product.index'), ['Authorization' => $apiToken->getContent()]);
 
         $response->assertStatus(200);
 
@@ -76,7 +75,9 @@ class ProductControllerTest extends TestCase
 
         Product::factory()->count($productQuantity)->create();
 
-        $response = $this->get('/api/products');
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->get(route('product.index'), ['Authorization' => $apiToken->getContent()]);
 
         $response->assertStatus(200);
 
@@ -87,7 +88,9 @@ class ProductControllerTest extends TestCase
     {
         $product = Product::factory()->create();
 
-        $response = $this->get(route('product.show', $product->code));
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->get(route('product.show', $product->code), ['Authorization' => $apiToken->getContent()]);
 
         $response->assertStatus(200);
 
@@ -109,8 +112,91 @@ class ProductControllerTest extends TestCase
 
         $wrongCode = 2;
 
-        $response = $this->get(route('product.show', $wrongCode));
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->get(route('product.show', $wrongCode), ['Authorization' => $apiToken->getContent()]);
 
         $response->assertStatus(404);
+    }
+
+    public function test_can_be_able_to_delete_a_product()
+    {
+        $product = Product::factory()->create();
+
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->post(route('product.delete', $product->code), [], ['Authorization' => $apiToken->getContent()]);
+
+        $deletedProduct = Product::find($product->id);
+
+        $response->assertStatus(200);
+
+        $this->assertEquals($deletedProduct->status, ProductStatus::Trash->value);
+    }
+
+
+
+    public function test_can_not_be_able_to_delete_a_product_with_wrong_code()
+    {
+        Product::factory()->create(['code' => 1]);
+
+        $wrongCode = 2;
+
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->post(route('product.delete', $wrongCode), [], ['Authorization' => $apiToken->getContent()]);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_can_be_able_to_update_a_product()
+    {
+        $product = Product::factory()->create();
+
+        $newProduct = Product::factory()->make();
+
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->withHeaders(['Authorization' => $apiToken->getContent()])
+            ->put(
+                route(
+                    'product.update',
+                    $product->code
+                ),
+                ['product_name' => $newProduct->product_name, 'quantity' => $newProduct->quantity, 'nutriscore_score' => $newProduct->nutriscore_score]
+            );
+
+        $updatedProduct = Product::find($product->id);
+
+        $response->assertStatus(200);
+
+        $this->assertEquals(
+            [$updatedProduct->product_name, $updatedProduct->quantity, $updatedProduct->nutriscore_score],
+            [$newProduct->product_name, $newProduct->quantity, $newProduct->nutriscore_score]
+        );
+    }
+
+    public function test_can_not_be_able_to_update_a_product_code()
+    {
+        $product = Product::factory()->create();
+
+        $newCode = Product::factory()->make()->code;
+
+        $apiToken = $this->get(route('apiToken'));
+
+        $response = $this->withHeaders(['Authorization' => $apiToken->getContent()])
+            ->put(
+                route(
+                    'product.update',
+                    $product->code
+                ),
+                ['code' => $newCode]
+            );
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('products', ['code' => $product->code]);
+
+        $this->assertDatabaseMissing('products', ['code' => $newCode]);
     }
 }

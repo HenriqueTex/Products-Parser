@@ -8,6 +8,8 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    public $apiToken;
+
     protected function setUp(): void
     {
         parent::setUp();

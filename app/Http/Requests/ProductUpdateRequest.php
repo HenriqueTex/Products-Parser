@@ -13,7 +13,7 @@ class ProductUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -40,7 +40,7 @@ class ProductUpdateRequest extends FormRequest
             'serving_size' => 'nullable',
             'serving_quantity' => 'nullable',
             'nutriscore_score' => 'nullable|numeric',
-            'nutriscore_grade' => 'nullable',
+            'nutriscore_grade' => 'nullable|numeric',
             'main_category' => 'nullable',
             'image_url' => 'nullable|url',
         ];
