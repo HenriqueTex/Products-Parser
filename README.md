@@ -52,7 +52,7 @@ Nesse desafio trabalharemos no desenvolvimento de uma REST API para utilizar os 
 
 ## Referência
 
-Esse projeto é um desafio proposto pela [Coodesh](https://coodesh.com/).
+>This is a challenge by [Coodesh](https://coodesh.com/).
 
 
 
