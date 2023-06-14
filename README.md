@@ -1,66 +1,58 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Products Parser
 
-## About Laravel
+Nesse desafio trabalharemos no desenvolvimento de uma REST API para utilizar os dados do projeto Open Food Facts, que é um banco de dados aberto com informação nutricional de diversos produtos alimentícios.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Processo de Desenvolvimento
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1º Passo - Criar Banco de dados mongoDb
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    Utilize o Atlas para criação do banco MongoDb noSql utilizando a própria documentação do mongoDb, uma vez criado realizei alguns testes criando coleções e registros no Atlas para entender melhor o funcionamento do banco de dados noSql. Com o banco criado adicionei os valores de conexão e testei a conexão do banco de dados com meu projeto Laravel.
+    
+2º Passo - Desenvolver Commando para criação dos produtos
+    
+    Iniciei realizando as chamadas api aos links disponíveis e entendendo seus retornos. Desenvolvi uma service que distinguiria os novos arquivos dos já importados. A proxima tarefa era descompactação e leitura do arquivo .gz, onde realizei uma pesquisa até encontrar a melhor solução para o meu caso e utilizando a pasta Storage para salvar temporariamente os arquivos.
 
-## Learning Laravel
+3º Passo - Adicionar o Schedule
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    Utilizei a própria documentação do Laravel para criar um schedule que chamaria o comando diariamente as 23:59.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4º Passo - Definição dos endpoints
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    De acordo com os endpoints solicitados foram definidas as rotas e controllers necessários para realizar o fluxo, foi analisado os pontos essenciais do objetivo da tarefa proposta para analisar pontos como o que deveria ser permitido ao usuário atualizar na rota de update, por exemplo. Todo o teste dos endpoints durante desenvolvimento foi feito utilizando o insomnia.
 
-## Laravel Sponsors
+5º Passo - Criação dos testes unitários
+    
+    Para criar os testes o primeiro passo foi a configuração do banco de testes, a primeira ideia foi utilizar algo semelhante ao sqlite para a realização dos testes. Na investigação ao não encontrar foi utilizada uma instancia de testes do mongoDb. Outro problema encontrado foi para reverter as ações no banco após cada teste uma vez que não seria possivel utilizar 'use databaseTransactions' ou o 'use refreshDatabase', a solução encontrada foi a criação de um arquivo databaseHelper com uma função para limpar as coleções e o uso da função setUp no arquivo de testCase para chamar o databaseHelper a cada execução de teste.
+    
+6º Passo - Definição de uma API_KEY nos endpoints
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    Foi decidido utilizar uma rota para gerar a apiKey atraves de um request que deve conter um email. Após criação da rota e da colection que armazena as apiKey's foi criado um middleware um para validação das chamadas de acordo com um header de 'Authorization'.
 
-### Premium Partners
+## Tecnologias
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- Linguagem: Php
+- Framework: Laravel
+- Tecnologia: MongoDb, FakerPhp, PHPUnit
 
-## Contributing
+## Instalação
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Clone o repositório: `git clone https://github.com/HenriqueTex/Products-Parser`
+2. Acesse o diretório do projeto: `cd Products-Parser`
+3. Instale as dependências: `npm install` ou `composer install`
+4. Configure as variáveis de ambiente: crie um arquivo `.env` e `.env.testing` com base no arquivo `.env.example` e configure as informações necessárias.
+6. Inicie o servidor local: `php artisan serve`
 
-## Code of Conduct
+## Uso
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    Para execução do projeto utilizar o comando 'php artisan schedule:work' para rodar o schedule localmente ou faça a chamada diretamente ao commando utilizando "php artisan app:get-api-data". Gere um apiToken através da rota "api/apiToken" enviando um json com o campo 'email' e utilize o token retornado para autenticar suas chamadas as rotas de index, show, update e delete.
+    Para execução dos testes configure a env.testing execute "php artisan test".
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## Referência
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Esse projeto é um desafio proposto pela [Coodesh](https://coodesh.com/).
+
+
+

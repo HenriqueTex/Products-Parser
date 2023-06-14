@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ApiTokenController;
 use App\Http\Controllers\ProductController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
